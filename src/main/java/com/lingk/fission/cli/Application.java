@@ -3,6 +3,7 @@ package com.lingk.fission.cli;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,12 +15,14 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 
 @SpringBootApplication
-@Command(name = "com.lingk.fission.cli.Application", synopsisSubcommandLabel = "COMMAND", subcommands = { ConfigureCommand.class, LoginAndConfigureCommand.class })
+@Command(name = "lingk", synopsisSubcommandLabel = "COMMAND", subcommands = { ConfigureCommand.class, LoginAndConfigureCommand.class })
 public class Application implements CommandLineRunner, Runnable {
 	static Logger LOG = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+        SpringApplication app = new SpringApplication(Application.class);
+        app.setBannerMode(Banner.Mode.OFF);
+        app.run(args);
 	}
 
 	@Autowired

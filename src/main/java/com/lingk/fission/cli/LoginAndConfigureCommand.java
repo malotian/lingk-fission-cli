@@ -75,12 +75,12 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 		mapper.writeValue(helper, claims);
 
 		DefaultExecutor executor = new DefaultExecutor();
-		String AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID = "aws configure set aws_access_key_id "
-				+ claims.get("https://fission.lingkcore.com/aws.session").get("awsaccessKeyId").asText();
+		String AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID = "aws configure set aws_access_key_id " + claims.get("https://fission.lingkcore.com/aws.session").get("awsaccessKeyId").asText()
+				+ " --profile lingk-fission";
 		String AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY = "aws configure set aws_secret_access_key "
-				+ claims.get("https://fission.lingkcore.com/aws.session").get("awssecretKey").asText();
-		String AWS_CONFIGURE_SET_AWS_SESSION_TOKEN = "aws configure set aws_session_token " + claims.get("https://fission.lingkcore.com/aws.session").get("sessionToken").asText();
-		String AWS_EKS_KUBE_CONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster;
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("awssecretKey").asText() + " --profile lingk-fission";
+		String AWS_CONFIGURE_SET_AWS_SESSION_TOKEN = "aws configure set aws_session_token " + claims.get("https://fission.lingkcore.com/aws.session").get("sessionToken").asText()
+				+ " --profile lingk-fission";
 
 		int exitValue = 0;
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID));
@@ -89,9 +89,7 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 		LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY, exitValue);
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SESSION_TOKEN));
 		LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_SESSION_TOKEN, exitValue);
-		exitValue = executor.execute(CommandLine.parse(AWS_EKS_KUBE_CONFIG));
-		LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBE_CONFIG, exitValue);
 
-		return 0;
+		return ConfigureCommand.execute(region, cluster);
 	}
 }
