@@ -86,11 +86,11 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID));
 		LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID, exitValue);
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY));
-		LOG.info("executed: {}, exitCode: {}", exitValue, AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY, exitValue);
+		LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY, exitValue);
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SESSION_TOKEN));
-		LOG.info("executed: {}, exitCode: {}", exitValue, AWS_CONFIGURE_SET_AWS_SESSION_TOKEN, exitValue);
+		LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_SESSION_TOKEN, exitValue);
 		exitValue = executor.execute(CommandLine.parse(AWS_EKS_KUBE_CONFIG));
-		LOG.info("executed: {}, exitCode: {}", exitValue, AWS_EKS_KUBE_CONFIG, exitValue);
+		LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBE_CONFIG, exitValue);
 
 		return 0;
 	}
