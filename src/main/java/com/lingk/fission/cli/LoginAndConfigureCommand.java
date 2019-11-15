@@ -1,15 +1,10 @@
 package com.lingk.fission.cli;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -78,41 +73,24 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 		helper = new StringWriter();
 		JsonNode claims = mapper.readTree(jwt.getClaims());
 		mapper.writeValue(helper, claims);
-		LOG.info("setting AWS_ACCESS_KEY_ID={}", claims.get("https://fission.lingkcore.com/aws.session").get("awsaccessKeyId"));
-		LOG.info("setting AWS_SECRET_ACCESS_KEY={}", claims.get("https://fission.lingkcore.com/aws.session").get("awssecretKey"));
-		LOG.info("setting AWS_SESSION_TOKEN={}", claims.get("https://fission.lingkcore.com/aws.session").get("sessionToken"));
 
-		ProcessBuilder processBuilder = new ProcessBuilder();
-		Map<String, String> environment = processBuilder.environment();
-		environment.put("AWS_ACCESS_KEY_ID", claims.get("https://fission.lingkcore.com/aws.session").get("awsaccessKeyId").asText());
-		environment.put("AWS_SECRET_ACCESS_KEY", claims.get("https://fission.lingkcore.com/aws.session").get("awssecretKey").asText());
-		environment.put("AWS_SESSION_TOKEN", claims.get("https://fission.lingkcore.com/aws.session").get("sessionToken").asText());
+		DefaultExecutor executor = new DefaultExecutor();
+		String AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID = "aws configure set aws_access_key_id "
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("awsaccessKeyId").asText();
+		String AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY = "aws configure set aws_secret_access_key "
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("awssecretKey").asText();
+		String AWS_CONFIGURE_SET_AWS_SESSION_TOKEN = "aws configure set aws_session_token " + claims.get("https://fission.lingkcore.com/aws.session").get("sessionToken").asText();
+		String AWS_EKS_KUBE_CONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster;
 
-		String[] AWS_EKS_KUBE_CONFIG = { "aws", "eks", "--region", region, "update-kubeconfig", "--name", cluster };
-
-		List<String> commands = new ArrayList<String>();
-		commands.addAll(Arrays.asList(AWS_EKS_KUBE_CONFIG));
-		LOG.info(String.join(" ", commands));
-
-		processBuilder.command(commands);
-
-		try {
-			Process process = processBuilder.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
-			}
-
-			int exitCode = process.waitFor();
-			if (exitCode != 0)
-				System.err.println("exited with code:" + exitCode);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		int exitValue = 0;
+		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID));
+		LOG.info("exitValue: {}, for: {}", exitValue, AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID);
+		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY));
+		LOG.info("exitValue: {}, for: {}", exitValue, AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY);
+		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SESSION_TOKEN));
+		LOG.info("exitValue: {}, for: {}", exitValue, AWS_CONFIGURE_SET_AWS_SESSION_TOKEN);
+		exitValue = executor.execute(CommandLine.parse(AWS_EKS_KUBE_CONFIG));
+		LOG.info("exitValue: {}, for: {}", exitValue, AWS_EKS_KUBE_CONFIG);
 
 		return 0;
 	}
