@@ -13,7 +13,7 @@ RUN apk update
 RUN apk add --update bash ca-certificates git python zip openssh
 RUN apk add --update -t deps curl make py-pip openssl
 
-COPY share/lingk-fission-cli-0.0.1-SNAPSHOT.jar /tmp/lingk-fission-cli.jar
+COPY ../../../../target/lingk-fission-cli-0.0.1-SNAPSHOT.jar /tmp/lingk-fission-cli.jar
 RUN chmod +x /tmp/lingk-fission-cli.jar
 RUN (echo '#!/usr/bin/java -jar'; cat /tmp/lingk-fission-cli.jar) > /usr/bin/lingk
 RUN chmod +x /usr/bin/lingk

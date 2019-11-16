@@ -13,7 +13,6 @@
 	<artifactId>lingk-fission-cli</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -67,19 +66,19 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>com.spotify</groupId>
+				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>VERSION GOES HERE</version>
 				<configuration>
-					<imageName>lingk-fission-env</imageName>
-					<dockerDirectory>docker</dockerDirectory>
-					<resources>
-						<resource>
-							<targetPath>/</targetPath>
-							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
-						</resource>
-					</resources>
+					<images>
+						<alias>webapp</alias>
+						<name>fabric8/compose-demo:latest</name>
+
+						<external>
+							<type>compose</type>
+							<basedir>src/main/docker</basedir>
+							<composeFile>docker-compose.yml</composeFile>
+						</external>
+					</images>
 				</configuration>
 			</plugin>
 		</plugins>
