@@ -66,20 +66,22 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<configuration>
-					<images>
-						<alias>webapp</alias>
-						<name>fabric8/compose-demo:latest</name>
-
-						<external>
-							<type>compose</type>
-							<basedir>src/main/docker</basedir>
-							<composeFile>docker-compose.yml</composeFile>
-						</external>
-					</images>
-				</configuration>
+				<groupId>com.dkanejs.maven.plugins</groupId>
+				<artifactId>docker-compose-maven-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+						<configuration>
+							<composeFile>${project.basedir}/docker-compose.yml</composeFile>
+							<ignorePullFailures>true</ignorePullFailures>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
