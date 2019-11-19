@@ -20,25 +20,26 @@ public class Application implements CommandLineRunner, Runnable {
 	static Logger LOG = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(Application.class);
-        app.setBannerMode(Banner.Mode.OFF);
-        app.run(args);
+		final SpringApplication app = new SpringApplication(Application.class);
+		app.setBannerMode(Banner.Mode.OFF);
+		app.run(args);
 	}
 
 	@Autowired
 	Configuration configuration;
 
-	@Override
-	public void run(String... args) {
-		Configuration.setInstance(configuration);
-		int exitCode = new CommandLine(this).execute(args);
-		System.exit(exitCode);
-	}
-
 	@Spec
 	CommandSpec spec;
 
+	@Override
 	public void run() {
 		throw new ParameterException(spec.commandLine(), "Missing required subcommand");
+	}
+
+	@Override
+	public void run(String... args) {
+		Configuration.setInstance(configuration);
+		final int exitCode = new CommandLine(this).execute(args);
+		System.exit(exitCode);
 	}
 }

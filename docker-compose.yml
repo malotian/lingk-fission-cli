@@ -4,3 +4,7 @@ services:
     image: malotian/lingk-fission-env
     container_name: lingk-fission-env
     build: .
+
+networks:
+    lingk-fission-env:
+       driver: bridge
