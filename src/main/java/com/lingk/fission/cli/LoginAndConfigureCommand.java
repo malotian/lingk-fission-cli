@@ -82,11 +82,11 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 
 		final DefaultExecutor executor = new DefaultExecutor();
 		final String AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID = "aws configure set aws_access_key_id "
-				+ claims.get("https://fission.lingkcore.com/aws.session").get("AccessKeyId").asText() + " --profile lingk-fission";
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("AccessKeyId").asText() + " --profile lingk-fission-cli-profile";
 		final String AWS_CONFIGURE_SET_AWS_SECRET_ACCESS_KEY = "aws configure set aws_secret_access_key "
-				+ claims.get("https://fission.lingkcore.com/aws.session").get("SecretAccessKey").asText() + " --profile lingk-fission";
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("SecretAccessKey").asText() + " --profile lingk-fission-cli-profile";
 		final String AWS_CONFIGURE_SET_AWS_SESSION_TOKEN = "aws configure set aws_session_token "
-				+ claims.get("https://fission.lingkcore.com/aws.session").get("SessionToken").asText() + " --profile lingk-fission";
+				+ claims.get("https://fission.lingkcore.com/aws.session").get("SessionToken").asText() + " --profile lingk-fission-cli-profile";
 
 		int exitValue = 0;
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_ACCESS_KEY_ID));

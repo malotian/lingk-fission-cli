@@ -1,6 +1,7 @@
 package com.lingk.fission.cli;
 
 import java.text.MessageFormat;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.exec.CommandLine;
@@ -23,10 +24,12 @@ public class ConfigureCommand implements Callable<Integer> {
 			cluster = MessageFormat.format("fission-{0}", region);
 		}
 
-		final String AWS_EKS_KUBE_CONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster + " --profile lingk-fission";
+		UUID uuid = UUID.randomUUID();
+		final String AWS_EKS_KUBECONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster + " --profile lingk-fission-cli-profile";
 
-		final int exitCode = executor.execute(CommandLine.parse(AWS_EKS_KUBE_CONFIG));
-		ConfigureCommand.LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBE_CONFIG, exitCode);
+		int exitCode = executor.execute(CommandLine.parse(AWS_EKS_KUBECONFIG));
+		ConfigureCommand.LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBECONFIG, exitCode);
+
 		return 0;
 
 	}

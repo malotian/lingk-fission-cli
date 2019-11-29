@@ -17,6 +17,8 @@ RUN ln -s /usr/local/aws-cli/v2/current/bin/aws2 /usr/bin/aws
 RUN curl -L https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl
 
+ENV KUBECONFIG /.kube/config
+
 # awscli
 #RUN pip install awscli
 COPY target/lingk-fission-cli-0.0.1-SNAPSHOT.jar /tmp/lingk-fission-cli.jar
@@ -24,11 +26,9 @@ RUN chmod +x /tmp/lingk-fission-cli.jar
 RUN (echo '#!/usr/bin/java -jar'; cat /tmp/lingk-fission-cli.jar) > /usr/bin/lingk
 RUN chmod +x /usr/bin/lingk
 
-
+#uncomment more for developer-aspect
+RUN curl -L "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+RUN mv /tmp/eksctl /usr/local/bin
 
 #uncomment more for developer-aspect
-#RUN curl -L "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-#RUN mv /tmp/eksctl /usr/local/bin
-
-#uncomment more for developer-aspect
-#RUN curl -sLSf https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+RUN curl -sLSf https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
