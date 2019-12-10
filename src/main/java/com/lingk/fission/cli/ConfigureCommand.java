@@ -20,14 +20,15 @@ public class ConfigureCommand implements Callable<Integer> {
 
 	public static Integer execute(String region, String cluster, String env) throws Exception {
 		final DefaultExecutor executor = new DefaultExecutor();
-		if (StringUtils.isEmpty(cluster)) {
-			cluster = MessageFormat.format("fission-{0}", region);
-		}
 
 		if (StringUtils.isEmpty(env)) {
 			env = "dev";
 		}
-
+		
+		if (StringUtils.isEmpty(cluster)) {
+			cluster = MessageFormat.format("fission-{0}-{1}", env, region);
+		}
+		
 		UUID uuid = UUID.randomUUID();
 		final String AWS_EKS_KUBECONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster + "-" + env + " --profile lingk-fission-cli-profile";
 
