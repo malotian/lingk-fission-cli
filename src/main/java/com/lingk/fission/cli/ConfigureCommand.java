@@ -25,11 +25,11 @@ public class ConfigureCommand implements Callable<Integer> {
 		}
 
 		if (StringUtils.isEmpty(env)) {
-			cluster = "dev";
+			env = "dev";
 		}
 
 		UUID uuid = UUID.randomUUID();
-		final String AWS_EKS_KUBECONFIG = "aws eks --region " + region + "-" + env + " update-kubeconfig --name " + cluster + " --profile lingk-fission-cli-profile";
+		final String AWS_EKS_KUBECONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster + "-" + env + " --profile lingk-fission-cli-profile";
 
 		int exitCode = executor.execute(CommandLine.parse(AWS_EKS_KUBECONFIG));
 		ConfigureCommand.LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBECONFIG, exitCode);
