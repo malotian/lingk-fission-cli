@@ -3,7 +3,7 @@ FROM openjdk:8-jre
 FROM centurylink/wetty-cli:0.0.8
 COPY --from=0 /usr/local/openjdk-8 /usr/local/openjdk-8
 RUN ln -s /usr/local/openjdk-8/bin/java /usr/bin/java
-RUN apt-get install -y curl zip
+RUN apt-get install -y curl zip zsh
 
 RUN curl -L https://github.com/fission/fission/releases/download/1.6.0/fission-cli-linux -o /usr/local/bin/fission
 RUN chmod +x /usr/local/bin/fission
@@ -32,3 +32,11 @@ RUN mv /tmp/eksctl /usr/local/bin
 
 #uncomment more for developer-aspect
 RUN curl -sLSf https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+
+ENV TERM xterm
+ENV ZSH_THEME agnoster
+
+RUN zsh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" ||true
+RUN ln -f /bin/zsh /bin/sh
+
+EXPOSE 3000

@@ -45,6 +45,9 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 	@Option(names = { "username" }, required = true, arity = "0..1", description = "auth0 psername", interactive = true)
 	String username;
 
+	@Option(names = { "env" }, required = true, arity = "0..1", description = "test/prod", interactive = true)
+	String env;
+
 	@Override
 	public Integer call() throws Exception {
 		final RestTemplate restTemplate = new RestTemplate();
@@ -96,6 +99,6 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 		exitValue = executor.execute(CommandLine.parse(AWS_CONFIGURE_SET_AWS_SESSION_TOKEN));
 		LoginAndConfigureCommand.LOG.info("executed: {}, exitCode: {}", AWS_CONFIGURE_SET_AWS_SESSION_TOKEN, exitValue);
 
-		return ConfigureCommand.execute(region, cluster);
+		return ConfigureCommand.execute(region, cluster, env);
 	}
 }
