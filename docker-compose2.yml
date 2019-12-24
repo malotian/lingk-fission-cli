@@ -1,0 +1,34 @@
+version: "3.2"
+services:
+   lingk-cli:
+      image: malotian/lingk-fission-env
+      container_name: lingk-cli
+      build: .
+      networks: 
+         - lingk.fission
+      hostname: lingk-cli
+      ports:
+         - "3000:3000"
+   shibboleth-sp:
+      image: jefferyb/shibboleth-sp
+      container_name: lingk-cli-proxy
+      environment:
+      - SERVICE_TO_PROTECT=lingk-cli
+      - SERVICE_PORT=3000
+      - HOSTNAME=lingk-cli
+      - IDP_ENTITY_ID=urn:malotian-lab.auth0.com
+      - IDP_METADATA_URL=https://malotian-lab.auth0.com/samlp/metadata/mocGemLIRaoyeJx6VP77jRSVYvLFglRL
+      - SUPPORT_EMAIL=root@localhost
+      - SHIB_DOWNLOAD_METADATA=true
+      ports:
+      - 80:80
+      - 443:443
+      restart: always
+      links:
+      - lingk-cli
+      networks: 
+         - lingk.fission
+      hostname: lingk-cli-proxy
+networks:
+    lingk.fission:
+       driver: bridge
