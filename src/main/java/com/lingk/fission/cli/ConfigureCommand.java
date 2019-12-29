@@ -24,15 +24,15 @@ public class ConfigureCommand implements Callable<Integer> {
 		if (StringUtils.isEmpty(env)) {
 			env = "dev";
 		}
-		
+
 		if (StringUtils.isEmpty(cluster)) {
 			cluster = MessageFormat.format("fission-{0}-{1}", env, region);
 		}
-		
-		UUID uuid = UUID.randomUUID();
+
+		UUID.randomUUID();
 		final String AWS_EKS_KUBECONFIG = "aws eks --region " + region + " update-kubeconfig --name " + cluster + " --profile lingk-fission-cli-profile";
 
-		int exitCode = executor.execute(CommandLine.parse(AWS_EKS_KUBECONFIG));
+		final int exitCode = executor.execute(CommandLine.parse(AWS_EKS_KUBECONFIG));
 		ConfigureCommand.LOG.info("executed: {}, exitCode: {}", AWS_EKS_KUBECONFIG, exitCode);
 
 		return 0;
@@ -42,11 +42,11 @@ public class ConfigureCommand implements Callable<Integer> {
 	@Option(names = { "cluster" }, arity = "0..1", hidden = true, description = "cluster name")
 	String cluster;
 
-	@Option(names = { "region" }, required = true, arity = "0..1", description = "region name", interactive = true)
-	String region;
-
 	@Option(names = { "env" }, required = true, arity = "0..1", description = "test/prod", interactive = true)
 	String env;
+
+	@Option(names = { "region" }, required = true, arity = "0..1", description = "region name", interactive = true)
+	String region;
 
 	@Override
 	public Integer call() throws Exception {

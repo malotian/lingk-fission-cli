@@ -5,7 +5,7 @@ COPY --from=0 /usr/local/openjdk-8 /usr/local/openjdk-8
 RUN ln -s /usr/local/openjdk-8/bin/java /usr/bin/java
 RUN apt-get install -y curl zip zsh
 
-RUN curl -L https://github.com/fission/fission/releases/download/1.6.0/fission-cli-linux -o /usr/local/bin/fission
+RUN curl -L https://github.com/fission/fission/releases/download/1.7.1fission-cli-linux -o /usr/local/bin/fission
 RUN chmod +x /usr/local/bin/fission
 
 RUN curl 'https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip' -o 'awscli-exe.zip'

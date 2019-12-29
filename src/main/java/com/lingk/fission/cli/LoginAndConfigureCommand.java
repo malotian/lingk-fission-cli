@@ -34,6 +34,9 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 	@Option(names = { "cluster" }, arity = "0..1", hidden = true, description = "cluster name")
 	String cluster;
 
+	@Option(names = { "env" }, required = true, arity = "0..1", description = "test/prod", interactive = true)
+	String env;
+
 	final ObjectMapper mapper = new ObjectMapper();
 
 	@Option(names = { "password" }, required = true, arity = "0..1", description = "auth0 password", interactive = true)
@@ -44,9 +47,6 @@ public class LoginAndConfigureCommand implements Callable<Integer> {
 
 	@Option(names = { "username" }, required = true, arity = "0..1", description = "auth0 psername", interactive = true)
 	String username;
-
-	@Option(names = { "env" }, required = true, arity = "0..1", description = "test/prod", interactive = true)
-	String env;
 
 	@Override
 	public Integer call() throws Exception {
